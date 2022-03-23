@@ -1,19 +1,28 @@
-from django.test import TestCase
-from LegacySite.models import Card
+from django.test import TestCase, Client
+from django.urls import reverse
+from LegacySite.models import *
+from LegacySite.views import *
+from django.http import HttpRequest
 
-# Create your tests here.
 
-class MyTest(TestCase):
-    # Django's test run with an empty database. We can populate it with
-    # data by using a fixture. You can create the fixture by running:
-    #    mkdir LegacySite/fixtures
-    #    python manage.py dumpdata LegacySite > LegacySite/fixtures/testdata.json
-    # You can read more about fixtures here:
-    #    https://docs.djangoproject.com/en/4.0/topics/testing/tools/#fixture-loading
-    fixtures = ["testdata.json"]
+import json
 
-    # Assuming that your database had at least one Card in it, this
-    # test should pass.
-    def test_get_card(self):
-        allcards = Card.objects.all()
-        self.assertNotEqual(len(allcards), 0)
+class TestResponse(TestCase):
+     def setUp(self):
+          self.client = Client()
+
+
+     def test_xss_gift(self):
+          prouct1 = Product.objects.create(product_name = 'test', product_image_path= 'test', recommended_price = 1, description = 'test')
+          response = self.client.get('/gift' , {'director' : '<a>evil</a>'})
+          #print(response.content)
+          #self.assertNotContains(response, "<a>evil</a>", status_code=200)
+          self.assertContains(response, "&lt;a&gt;evil&lt;/a&gt;", status_code=200)
+
+
+     def test_xss_buy(self):
+          prouct1 = Product.objects.create(product_name = 'test', product_image_path= 'test', recommended_price = 1, description = 'test')
+          response = self.client.get('/buy' , {'director' : '<a>evil</a>'})
+          #print(response.content)
+          #self.assertNotContains(response, "<a>evil</a>", status_code=200)
+          self.assertContains(response, "&lt;a&gt;evil&lt;/a&gt;", status_code=200)
