@@ -1,0 +1,16 @@
+language: python
+python:
+  - "3.6"      # current default Python on Travis CI
+# command to install dependencies
+env:
+  -DJANGO_VERSION=3.1.3
+
+install:
+  - pip install -q Django==$DJANGO_VERSION
+# command to run tests
+script:
+#  - python GiftcardSite/manage.py LegacySite
+#  - python GiftcardSite/manage.py makemigrations
+#  - python GiftcardSite/manage.py migrate
+#  - sh import_dbs.sh
+   - python manage.py test
