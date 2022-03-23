@@ -8,6 +8,7 @@ env:
 install:
   - pip install -q Django==$DJANGO_VERSION
 # command to run tests
+on: [push]
 script:
 #  - python GiftcardSite/manage.py LegacySite
 #  - python GiftcardSite/manage.py makemigrations
